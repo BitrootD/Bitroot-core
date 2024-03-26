@@ -34,7 +34,7 @@ from counterpartylib.lib import message_type
 from counterpartylib.lib import arc4
 from counterpartylib.lib.transaction_helper import p2sh_encoding
 
-from .messages import (send, order, btcpay, issuance, broadcast, bet, dividend, burn, cancel, rps, rpsresolve, destroy, sweep, dispenser)
+from .messages import (send, order, btcpay, issuance, broadcast, bet, publish, execute, dividend, burn, cancel, rps, rpsresolve, destroy, sweep, dispenser)
 from .messages.versions import enhanced_send, mpma
 
 from .kickstart.blocks_parser import BlockchainParser, ChainstateParser
@@ -98,7 +98,10 @@ def parse_tx(db, tx):
             if message_type_id == send.ID:
                 send.parse(db, tx, message)
             elif message_type_id == enhanced_send.ID and util.enabled('enhanced_sends', block_index=tx['block_index']):
-                enhanced_send.parse(db, tx, message)
+                #enhanced_send.parse(db, tx, message)
+                enhanced_send.parse(db, tx, message, message_type_id)
+            elif message_type_id == enhanced_send.TAPROOT_ID and util.enabled('taproot_support', block_index=tx['block_index']):
+                enhanced_send.parse(db, tx, message, message_type_id)
             elif message_type_id == mpma.ID and util.enabled('mpma_sends', block_index=tx['block_index']):
                 mpma.parse(db, tx, message)
             elif message_type_id == order.ID:
@@ -124,7 +127,10 @@ def parse_tx(db, tx):
             elif message_type_id == destroy.ID and util.enabled('destroy_reactivated', block_index=tx['block_index']):
                 destroy.parse(db, tx, message)
             elif message_type_id == sweep.ID and util.enabled('sweep_send', block_index=tx['block_index']):
-                sweep.parse(db, tx, message)
+                #sweep.parse(db, tx, message)
+                sweep.parse(db, tx, message, message_type_id)
+            elif message_type_id == sweep.TAPROOT_ID and util.enabled('taproot_support', block_index=tx['block_index']):
+                sweep.parse(db, tx, message, message_type_id)
             elif message_type_id == dispenser.ID and util.enabled('dispensers', block_index=tx['block_index']):
                 dispenser.parse(db, tx, message)
             elif message_type_id == dispenser.DISPENSE_ID and util.enabled('dispensers', block_index=tx['block_index']):
@@ -394,6 +400,10 @@ def initialise(db):
     issuance.initialise(db)
     broadcast.initialise(db)
     bet.initialise(db)
+
+    publish.initialise(db)
+    execute.initialise(db)
+    
     dividend.initialise(db)
     burn.initialise(db)
     cancel.initialise(db)
@@ -552,7 +562,10 @@ def _get_swap_tx(decoded_tx, block_parser=None, block_index=None, db=None):
                 pass #Just ignore.
             elif util.enabled('segwit_support') and asm[0] == 0:
                 # Segwit output
-                destination, new_data = decode_p2w(vout.scriptPubKey)
+                #destination, new_data = decode_p2w(vout.scriptPubKey)
+                destination, new_data = decode_p2w(0, vout.scriptPubKey)
+            elif util.enabled('taproot_support') and asm[0] == 1:
+                destination, new_data = decode_p2w(1, vout.scriptPubKey)
             else:
                 logger.error('unrecognised scriptPubkey. Just ignore this: ' + str(asm))
 
@@ -594,7 +607,10 @@ def _get_swap_tx(decoded_tx, block_parser=None, block_index=None, db=None):
             elif util.enabled('segwit_support') and asm[0] == 0:
                 # Segwit output
                 # Get the full transaction data for this input transaction.
-                new_source, new_data = decode_p2w(vout.scriptPubKey)
+                #new_source, new_data = decode_p2w(vout.scriptPubKey)
+                new_source, new_data = decode_p2w(0, vout.scriptPubKey)
+            elif util.enabled('taproot_support') and asm[0] == 1:
+                new_source, new_data = decode_p2w(1, vout.scriptPubKey)
             else:
                 raise DecodeError('unrecognised source type')
 
@@ -795,9 +811,14 @@ def decode_checkmultisig(asm, ctx):
 
     return destination, data
 
-def decode_p2w(script_pubkey):
+#def decode_p2w(script_pubkey):
+def decode_p2w(witver, script_pubkey):
     try:
-        bech32 = bitcoinlib.bech32.CBech32Data.from_bytes(0, script_pubkey[2:22])
+        #bech32 = bitcoinlib.bech32.CBech32Data.from_bytes(0, script_pubkey[2:22])
+        if witver == 0:
+            bech32 = bitcoinlib.bech32.CBech32Data.from_bytes(witver, script_pubkey[2:22])
+        else:
+            bech32 = bitcoinlib.bech32.CBech32Data.from_bytes(witver, script_pubkey[2:42])
         return str(bech32), None
     except TypeError as e:
         raise DecodeError('bech32 decoding error')
@@ -842,7 +863,10 @@ def get_tx_info2(tx_hex, block_parser=None, p2sh_support=False, p2sh_is_segwit=F
         elif util.enabled('segwit_support') and asm[0] == 0:
             # Segwit Vout, second param is redeemScript
             #redeemScript = asm[1]
-            new_destination, new_data = decode_p2w(vout.scriptPubKey)
+            #new_destination, new_data = decode_p2w(vout.scriptPubKey)
+            new_destination, new_data = decode_p2w(0, vout.scriptPubKey)
+        elif util.enabled('taproot_support') and asm[0] == 1:
+            new_destination, new_data = decode_p2w(1, vout.scriptPubKey)
         else:
             raise DecodeError('unrecognised output type')
         assert not (new_destination and new_data)
@@ -932,7 +956,10 @@ def get_tx_info2(tx_hex, block_parser=None, p2sh_support=False, p2sh_is_segwit=F
                 raise DecodeError('data in source')
         elif util.enabled('segwit_support') and asm[0] == 0:
             # Segwit output
-            new_source, new_data = decode_p2w(vout.scriptPubKey)
+            #new_source, new_data = decode_p2w(vout.scriptPubKey)
+            new_source, new_data = decode_p2w(0, vout.scriptPubKey)
+        elif util.enabled('taproot_support') and asm[0] == 1:
+            new_source, new_data = decode_p2w(1, vout.scriptPubKey)
         else:
             raise DecodeError('unrecognised source type')
 
