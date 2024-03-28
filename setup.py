@@ -68,41 +68,6 @@ class install_apsw(Command):
         shutil.rmtree('apsw-%s' % APSW_VERSION)
         os.remove('apsw-%s.zip' % APSW_VERSION)
 
-class install_serpent(Command):
-    description = "Install Ethereum Serpent"
-    user_options = []
-
-    def initialize_options(self):
-        pass
-    def finalize_options(self):
-        pass
-
-    def run(self):
-        # In Windows Serpent should be installed manually
-        if os.name == 'nt':
-            print('To complete the installation you have to install Serpent: https://github.com/ethereum/serpent')
-            return
-
-        SERPENT_REPO =  "ethereum"
-        SERPENT_COMMIT = "0ec2042c71edf43ef719ea6268d4206a2424d5bb"
-
-        print("downloading serpent.")
-        urllib.request.urlretrieve('https://codeload.github.com/{}/serpent/zip/{}'.format(SERPENT_REPO, SERPENT_COMMIT), 'serpent.zip')
-
-        print("extracting.")
-        with zipfile.ZipFile('serpent.zip', 'r') as zip_file:
-            zip_file.extractall()
-
-        print("making serpent.")
-        os.system('cd serpent-{} && make'.format(SERPENT_COMMIT))
-        print("install serpent using sudo.")
-        print("hence it might request a password.")
-        os.system('cd serpent-{} && sudo make install'.format(SERPENT_COMMIT))
-
-        print("clean files.")
-        shutil.rmtree('serpent-{}'.format(SERPENT_COMMIT))
-        os.remove('serpent.zip')
-
 
 class move_old_db(Command):
     description = "Move database from old to new default data directory"
@@ -141,7 +106,6 @@ class move_old_db(Command):
 
 def post_install(cmd):
     cmd.run_command('install_apsw')
-    cmd.run_command('install_serpent')
     cmd.run_command('move_old_db')
 
 class install(_install):
@@ -253,7 +217,6 @@ setup_options = {
     'cmdclass': {
         'install': install,
         'move_old_db': move_old_db,
-        'install_serpent': install_serpent,
         'install_apsw': install_apsw
     }
 }

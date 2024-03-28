@@ -12,33 +12,16 @@ LENGTH = 8 + 8 + 21
 MAX_MEMO_LENGTH = 34
 ID = 2 # 0x02
 
-#def unpack(db, message, block_index):
-TAPROOT_FORMAT = '>QQ33s'
-TAPROOT_LENGTH = 8 + 8 + 33
-TAPROOT_MAX_MEMO_LENGTH = 22
-TAPROOT_ID = 5
-
-def unpack(db, message, block_index, is_taproot=False):
+def unpack(db, message, block_index):
     try:
-        length = LENGTH
-        format = FORMAT
-        max_memo_length = MAX_MEMO_LENGTH   
-        if is_taproot and util.enabled("taproot_support", block_index):
-            length = TAPROOT_LENGTH
-            format = TAPROOT_FORMAT
-            max_memo_length = TAPROOT_MAX_MEMO_LENGTH
-
         # account for memo bytes
-        #memo_bytes_length = len(message) - LENGTH
-        memo_bytes_length = len(message) - length
+        memo_bytes_length = len(message) - LENGTH
         if memo_bytes_length < 0:
             raise exceptions.UnpackError('invalid message length')
-        #if memo_bytes_length > MAX_MEMO_LENGTH:
-        if memo_bytes_length > max_memo_length:
+        if memo_bytes_length > MAX_MEMO_LENGTH:
             raise exceptions.UnpackError('memo too long')
 
-        #struct_format = FORMAT + ('{}s'.format(memo_bytes_length))
-        struct_format = format + ('{}s'.format(memo_bytes_length))
+        struct_format = FORMAT + ('{}s'.format(memo_bytes_length))
         asset_id, quantity, short_address_bytes, memo_bytes = struct.unpack(struct_format, message)
         if len(memo_bytes) == 0:
             memo_bytes = None
@@ -67,8 +50,7 @@ def unpack(db, message, block_index, is_taproot=False):
     }
     return unpacked
 
-#def validate (db, source, destination, asset, quantity, memo_bytes, block_index):
-def validate (db, source, destination, asset, quantity, memo_bytes, block_index, is_taproot=False):
+def validate (db, source, destination, asset, quantity, memo_bytes, block_index):
     problems = []
 
     if asset == config.BTC: problems.append('cannot send {}'.format(config.BTC))
@@ -92,8 +74,7 @@ def validate (db, source, destination, asset, quantity, memo_bytes, block_index,
         problems.append('destination is required')
 
     # check memo
-    #if memo_bytes is not None and len(memo_bytes) > MAX_MEMO_LENGTH:
-    if memo_bytes is not None and len(memo_bytes) > (TAPROOT_MAX_MEMO_LENGTH if is_taproot else MAX_MEMO_LENGTH):
+    if memo_bytes is not None and len(memo_bytes) > MAX_MEMO_LENGTH:
       problems.append('memo is too long')
 
     if util.enabled('options_require_memo'):
@@ -116,9 +97,6 @@ def compose (db, source, destination, asset, quantity, memo, memo_is_hex):
     # Just send BTC?
     if asset == config.BTC:
         return (source, [(destination, quantity)], None)
-
-    # check if destination is taproot
-    destination_is_taproot = address.is_taproot(destination)
 
     # resolve subassets
     asset = util.resolve_subasset_longname(db, asset)
@@ -143,40 +121,27 @@ def compose (db, source, destination, asset, quantity, memo, memo_is_hex):
 
     block_index = util.CURRENT_BLOCK_INDEX
 
-    problems = validate(db, source, destination, asset, quantity, memo_bytes, block_index, destination_is_taproot)
+    problems = validate(db, source, destination, asset, quantity, memo_bytes, block_index)
     if problems: raise exceptions.ComposeError(problems)
 
     asset_id = util.get_asset_id(db, asset, block_index)
 
-    format = FORMAT
-    id = ID
-    if destination_is_taproot:
-        format = TAPROOT_FORMAT
-        id = TAPROOT_ID
-
     short_address_bytes = address.pack(destination)
 
-    #data = message_type.pack(ID)
-    #data += struct.pack(FORMAT, asset_id, quantity, short_address_bytes)
-    data = message_type.pack(id)
-    data += struct.pack(format, asset_id, quantity, short_address_bytes)
+    data = message_type.pack(ID)
+    data += struct.pack(FORMAT, asset_id, quantity, short_address_bytes)
     data += memo_bytes
 
     cursor.close()
     # return an empty array as the second argument because we don't need to send BTC dust to the recipient
     return (source, [], data)
 
-#def parse (db, tx, message):
-def parse (db, tx, message, message_type_id):
+def parse (db, tx, message):
     cursor = db.cursor()
 
     # Unpack message.
     try:
-        #unpacked = unpack(db, message, tx['block_index'])
-        is_taproot = False
-        if message_type_id == TAPROOT_ID:
-            is_taproot = True
-        unpacked = unpack(db, message, tx['block_index'], is_taproot)
+        unpacked = unpack(db, message, tx['block_index'])
         asset, quantity, destination, memo_bytes = unpacked['asset'], unpacked['quantity'], unpacked['address'], unpacked['memo']
 
         status = 'valid'

@@ -151,9 +151,8 @@ def parse (db, tx, message):
                 text = b''
             else:
                 text = rawtext[-textlen:]
-            print("rawtext: %s。" % (rawtext))
-            print("text: %s，length %d 长。text length: %d 长" % (text, textlen,len(text)))
-            #assert len(text) == textlen
+
+            assert len(text) == textlen
         else:
             if len(message) - LENGTH <= 52:
                 curr_format = FORMAT + '{}p'.format(len(message) - LENGTH)
@@ -170,7 +169,6 @@ def parse (db, tx, message):
     except (struct.error) as e:
         timestamp, value, fee_fraction_int, text = 0, None, 0, None
         status = 'invalid: could not unpack'
-
     except AssertionError:
         timestamp, value, fee_fraction_int, text = 0, None, 0, None
         status = "invalid: could not unpack text"
