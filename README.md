@@ -1,7 +1,7 @@
 # Description
 `Bitroot-core` is the reference implementation of the [Counterparty Protocol](https://counterparty.io).
 
-**Note:** for the command-line interface to `bitroot-lib`, see [`bitroot-cli`](https://github.com/BitrootD/Bitroot-cli.git).
+**Note:** for the command-line interface to `bitroot-lib`, see [`Bitroot-cli`](https://github.com/BitrootD/Bitroot-cli.git).
 
 
 # Installation
