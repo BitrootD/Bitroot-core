@@ -10,7 +10,7 @@ import urllib.request
 import sys
 import shutil
 
-from counterpartylib.lib import config
+from bitrootlib.lib import config
 
 CURRENT_VERSION = config.VERSION_STRING
 APSW_VERSION = "3.24.0-r1"
@@ -85,7 +85,7 @@ class move_old_db(Command):
         old_database = os.path.join(old_data_dir, 'counterpartyd.9.db')
         old_database_testnet = os.path.join(old_data_dir, 'counterpartyd.9.testnet.db')
 
-        new_data_dir = appdirs.user_data_dir(appauthor=config.XCP_NAME, appname=config.APP_NAME, roaming=True)
+        new_data_dir = appdirs.user_data_dir(appauthor=config.BITROOT_NAME, appname=config.APP_NAME, roaming=True)
         new_database = os.path.join(new_data_dir, '{}.db'.format(config.APP_NAME))
         new_database_testnet = os.path.join(new_data_dir, '{}.testnet.db'.format(config.APP_NAME))
 
@@ -184,7 +184,7 @@ required_packages = [
 ]
 
 setup_options = {
-    'name': 'counterparty-lib',
+    'name': 'bitroot-lib',
     'version': CURRENT_VERSION,
     'author': 'Counterparty Developers',
     'author_email': 'dev@counterparty.io',
@@ -207,8 +207,8 @@ setup_options = {
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: System :: Distributed Computing"
     ],
-    'download_url': 'https://github.com/CounterpartyXCP/counterparty-lib/releases/tag/' + CURRENT_VERSION,
-    'provides': ['counterpartylib'],
+    'download_url': 'https://github.com/BitrootD/Bitroot-core/releases/tag/' + CURRENT_VERSION,
+    'provides': ['bitrootlib'],
     'packages': find_packages(),
     'zip_safe': False,
     'setup_requires': ['appdirs', 'setuptools-markdown'],

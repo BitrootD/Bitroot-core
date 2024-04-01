@@ -1,2 +1,2 @@
-include counterpartylib/mainnet_burns.csv
-include counterpartylib/protocol_changes.json
+include bitrootlib/mainnet_burns.csv
+include bitrootlib/protocol_changes.json

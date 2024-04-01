@@ -5,7 +5,7 @@ import os
 import re
 import shutil
 
-DIR = "counterpartylib/test/fixtures/scenarios"
+DIR = "bitrootlib/test/fixtures/scenarios"
 REGEX = r"^(?P<name>.*)\.new(?P<ext>\..*)$"
 
 dryrun = '--dry-run' in sys.argv or '--dryrun' in sys.argv

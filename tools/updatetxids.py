@@ -8,8 +8,8 @@ import pprint
 import binascii
 
 COMMIT = "8906a8188ba841599f66627157e29a270ca838cf"
-UNITTEST_FIXTURE_SQL = "counterpartylib/test/fixtures/scenarios/unittest_fixture.sql"
-UNITTEST_VECTORS_PY = "counterpartylib/test/fixtures/vectors.py"
+UNITTEST_FIXTURE_SQL = "bitrootlib/test/fixtures/scenarios/unittest_fixture.sql"
+UNITTEST_VECTORS_PY = "bitrootlib/test/fixtures/vectors.py"
 
 REGEX = r"^(?P<change>[+-])INSERT INTO transactions VALUES\((?P<tx_index>\d+),'(?P<tx_hash>.+?)',"
 

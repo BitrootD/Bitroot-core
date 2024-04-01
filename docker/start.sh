@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # Run "setup.py develop" if we need to (can be the case if the .egg-info paths get removed, or mounted over, e.g. fednode)
-if [ ! -d /counterparty-lib/counterparty_lib.egg-info ]; then
-    cd /counterparty-lib; python3 setup.py develop; cd /
+if [ ! -d /bitroot-lib/counterparty_lib.egg-info ]; then
+    cd /bitroot-lib; python3 setup.py develop; cd /
 fi
-if [ ! -d /counterparty-cli/counterparty_cli.egg-info ]; then
-    cd /counterparty-cli; python3 setup.py develop; cd /
+if [ ! -d /Bitroot-cli/bitroot_cli.egg-info ]; then
+    cd /Bitroot-cli; python3 setup.py develop; cd /
 fi
 
 # Bootstrap if the database does not exist (do this here to handle cases
@@ -13,12 +13,12 @@ fi
 if ([ -z "$2" ] || [ $2 != "true" ]); then
     if [ ! -f /root/.local/share/counterparty/counterparty.db ] && [ $1 = "mainnet" ]; then
         echo "Downloading mainnet bootstrap DB..."
-        counterparty-server bootstrap --quiet
+        bitroot-server bootstrap --quiet
         PARAMS="${PARAMS} --checkdb"
     fi
     if [ ! -f /root/.local/share/counterparty/counterparty.testnet.db ] && [ $1 = "testnet" ]; then
         echo "Downloading testnet bootstrap DB..."
-        counterparty-server --testnet bootstrap --quiet
+        bitroot-server --testnet bootstrap --quiet
         PARAMS="${PARAMS} --checkdb"
     fi
 fi
@@ -30,7 +30,7 @@ fi
 : ${COMMAND:="start"}
 
 trap 'kill -TERM $PID' TERM INT
-/usr/local/bin/counterparty-server ${PARAMS} ${COMMAND} &
+/usr/local/bin/bitroot-server ${PARAMS} ${COMMAND} &
 PID=$!
 wait $PID
 trap - TERM INT

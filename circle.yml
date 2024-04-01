@@ -16,7 +16,7 @@ jobs:
           pkg-manager: pip
 
       - run:
-          name: Run counterparty-lib setup and install
+          name: Run bitroot-lib setup and install
           command: python setup.py develop 
 
       - run: 
@@ -40,7 +40,7 @@ jobs:
           name: "Run tests"
           command: |
             mkdir test-results
-            py.test --junitxml=test-results/junit.xml --verbose --skiptestbook=all --cov-config=.coveragerc --cov-report=term-missing --cov=./ counterpartylib
+            py.test --junitxml=test-results/junit.xml --verbose --skiptestbook=all --cov-config=.coveragerc --cov-report=term-missing --cov=./ bitrootlib
 
       - store_test_results:
           path: test-results
@@ -64,7 +64,7 @@ jobs:
           name: "Run testnet reparse test"
           command: |
             mkdir test-results
-            py.test --junitxml=test-results/junit.xml --verbose --capture=no --skiptestbook=mainnet -k test_book counterpartylib/test/reparse_test.py
+            py.test --junitxml=test-results/junit.xml --verbose --capture=no --skiptestbook=mainnet -k test_book bitrootlib/test/reparse_test.py
       
       - store_test_results:
           path: test-results
@@ -88,7 +88,7 @@ jobs:
           name: "Run testnet reparse test"
           command: |
             mkdir test-results
-            py.test --junitxml=test-results/junit.xml --verbose --capture=no --skiptestbook=testnet -k test_book counterpartylib/test/reparse_test.py
+            py.test --junitxml=test-results/junit.xml --verbose --capture=no --skiptestbook=testnet -k test_book bitrootlib/test/reparse_test.py
       
       - store_test_results:
           path: test-results
