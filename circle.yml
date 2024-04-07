@@ -56,9 +56,9 @@ jobs:
       - run:
           name: "Get latest testnet db file"
           command: |
-            mkdir -p ~/.local/share/counterparty
-            wget https://counterparty.io/bootstrap/counterparty-db-testnet-7.latest.tar.gz -O ~/.local/share/counterparty/counterparty-db-testnet.latest.tar.gz
-            tar -C ~/.local/share/counterparty -xvzf ~/.local/share/counterparty/counterparty-db-testnet.latest.tar.gz
+            mkdir -p ~/.local/share/bitroot
+            wget https://bitroot.io/bootstrap/bitroot-db-testnet-7.latest.tar.gz -O ~/.local/share/bitroot/bitroot-db-testnet.latest.tar.gz
+            tar -C ~/.local/share/bitroot -xvzf ~/.local/share/bitroot/bitroot-db-testnet.latest.tar.gz
 
       - run:
           name: "Run testnet reparse test"
@@ -80,9 +80,9 @@ jobs:
       - run:
           name: "Get latest mainnet db file"
           command: |
-            mkdir -p ~/.local/share/counterparty
-            wget https://counterparty.io/bootstrap/counterparty-db.latest.tar.gz -O ~/.local/share/counterparty/counterparty-db.latest.tar.gz
-            tar -C ~/.local/share/counterparty -xvzf ~/.local/share/counterparty/counterparty-db.latest.tar.gz
+            mkdir -p ~/.local/share/bitroot
+            wget https://bitroot.io/bootstrap/bitroot-db.latest.tar.gz -O ~/.local/share/bitroot/bitroot-db.latest.tar.gz
+            tar -C ~/.local/share/bitroot -xvzf ~/.local/share/bitroot/bitroot-db.latest.tar.gz
 
       - run:
           name: "Run testnet reparse test"

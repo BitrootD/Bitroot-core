@@ -1,5 +1,5 @@
 # Description
-`Bitroot-core` is the reference implementation of the [Counterparty Protocol](https://counterparty.io).
+`Bitroot-core` is the reference implementation of the [Bitroot Protocol].
 
 **Note:** for the command-line interface to `bitroot-lib`, see [`Bitroot-cli`](https://github.com/BitrootD/Bitroot-cli.git).
 
@@ -117,9 +117,9 @@ Client and Server log files are named `bitroot.client.[testnet.]log` and `bitroo
 * Linux: `~/.cache/bitroot/log/`
 * Windows: `%APPDATA%\Local\Bitroot\bitroot\Logs`
 
-Counterparty API activity is logged in `server.[testnet.]api.log` and `client.[testnet.]api.log`.
+Bitroot API activity is logged in `server.[testnet.]api.log` and `client.[testnet.]api.log`.
 
-Counterparty database files are by default named `bitroot.[testnet.]db` and located in the following directories:
+Bitroot database files are by default named `bitroot.[testnet.]db` and located in the following directories:
 
 * Linux: `~/.local/share/bitroot`
 * Windows: `%APPDATA%\Roaming\Bitroot\bitroot`
@@ -171,4 +171,4 @@ A `bitroot-client` configuration file looks like this:
 
 # Further Reading
 
-* [Official Project Documentation](http://counterparty.io/docs/)
+* [Official Project Documentation]

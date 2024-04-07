@@ -50,7 +50,7 @@
     * Upgrade SQLite/APSW to v3.12.2
         * Run `python3 setup.py install_apsw` to upgrade your installed version.
         * Run `./tools/upgradesqlitepagesize.py <PATHTOYOURDB>` while your node is OFFLINE to upgrade.
-          Most likely the path to your DB is `~/.local/share/counterparty/counterparty.db`.
+          Most likely the path to your DB is `~/.local/share/bitroot/bitroot.db`.
 * v9.55.4 (2017-10-31)
     * Fix for uncaught exception in short asset name issuances
 * v9.55.3 (2017-09-26)
@@ -72,7 +72,7 @@
     * Only use first usable input for source (protocol change: 423888)
     * Fixed issue with broadcasts of exactly 52 chars, by always adding a varint to specify the length (protocol change: 423888)
     * Cleanup destroy.parse and add unit tests for it (protocol change: 423888)
-    * Added Docker image building (counterparty/bitroot-server on Dockerhub)
+    * Added Docker image building (bitroot/bitroot-server on Dockerhub)
     * Enhanced Travis to run test suite inside Docker image, and push image if testsuite passes
     * UTXO "locking" used to construct a transaction for 3 seconds to avoid a user double spending against himself
     * Improved APSW install routine to downgrade when newer version is installed
@@ -175,7 +175,7 @@
     * improved docstring coverage
     * removed option to use Insight, Blockr and SoChain as a backend
     * tweaked Coveralls configuration
-    * Rename the database file name from `counterpartyd.9.db` to `counterparty.db`
+    * Rename the database file name from `bitrootd.9.db` to `bitroot.db`
     * Add BTCD support
 * v9.49.3 (2014-12-28)
     * better logging when handling `SIGTERM`, `SIGKILL`

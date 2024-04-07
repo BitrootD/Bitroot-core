@@ -1,6 +1,6 @@
 FROM ubuntu:18.04
 
-#MAINTAINER Counterparty Developers <dev@counterparty.io>
+#MAINTAINER Bitroot Developers <dev@bitroot.io>
 
 # Install common dependencies
 RUN apt-get update && apt-get install -y apt-utils ca-certificates wget curl git mercurial \
@@ -39,7 +39,7 @@ RUN pip3 install -r requirements.txt
 RUN python3 setup.py develop
 
 # Additional setup
-COPY docker/server.conf /root/.config/counterparty/server.conf
+COPY docker/server.conf /root/.config/bitroot/server.conf
 COPY docker/start.sh /usr/local/bin/start.sh
 RUN chmod a+x /usr/local/bin/start.sh
 WORKDIR /

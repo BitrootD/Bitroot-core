@@ -37,11 +37,11 @@ before_install:
 - if curl --output /dev/null --silent --head --fail "https://github.com/BitrootD/Bitroot-cli/tree/$BRANCH"; then export DOCKERFILE_CLI_BRANCH="$BRANCH"; else export DOCKERFILE_CLI_BRANCH="develop"; fi
 - echo $DOCKERFILE_CLI_BRANCH
 # build docker image
-- docker build -t counterparty/bitroot-server:$DOCKER_TAG --build-arg CLI_BRANCH="$DOCKERFILE_CLI_BRANCH" .
+- docker build -t bitroot/bitroot-server:$DOCKER_TAG --build-arg CLI_BRANCH="$DOCKERFILE_CLI_BRANCH" .
 
 script:
 # run the test suite in the docker container we just made
-- docker run --entrypoint=/bin/bash counterparty/bitroot-server:$DOCKER_TAG -c "cd /bitroot-lib/bitrootlib; py.test --verbose --skiptestbook=all --cov-config=../.coveragerc --cov-report=term-missing --cov=./"
+- docker run --entrypoint=/bin/bash bitroot/bitroot-server:$DOCKER_TAG -c "cd /bitroot-lib/bitrootlib; py.test --verbose --skiptestbook=all --cov-config=../.coveragerc --cov-report=term-missing --cov=./"
 
 after_success:
 - coveralls
@@ -49,7 +49,7 @@ after_success:
 - |
   if [ "$DOCKER_TAG" != "nopush" ]; then
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-    docker push counterparty/bitroot-server:$DOCKER_TAG;
+    docker push bitroot/bitroot-server:$DOCKER_TAG;
   fi
 
 notifications:

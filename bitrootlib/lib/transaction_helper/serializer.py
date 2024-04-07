@@ -1,5 +1,5 @@
 """
-Construct and serialize the Bitcoin transactions that are Counterparty transactions.
+Construct and serialize the Bitcoin transactions that are Bitroot transactions.
 
 This module contains no consensus‐critical code.
 """

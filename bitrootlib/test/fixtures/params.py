@@ -23,7 +23,7 @@ DEFAULT_PARAMS = {
     'fee_required': 900000,
     'fee_provided': 1000000,
     'fee_multiplier': .05,
-    'unspendable': 'mvCounterpartyXXXXXXXXXXXXXXW24Hef',
+    'unspendable': 'mvBitrootXXXXXXXXXXXXXXXXXXXW24Hef',
     'burn_start': 310000,
     'burn_end': 4017708,
     'burn_quantity': int(.62 * UNIT),

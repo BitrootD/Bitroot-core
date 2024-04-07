@@ -43,7 +43,7 @@ time.tzset()
 locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 
 # TODO: This should grab the correct backend port and password, when used for, e.g., saverawtransactions.
-COUNTERPARTYD_OPTIONS = {
+BITROOTD_OPTIONS = {
     'testcoin': False,
     'rpc_port': 9999,
     'rpc_password': 'pass',
@@ -60,14 +60,14 @@ MOCK_UTXO_SET = None
 
 
 def init_database(sqlfile, dbfile, options=None):
-    kwargs = COUNTERPARTYD_OPTIONS.copy()
+    kwargs = BITROOTD_OPTIONS.copy()
     kwargs.update(options or {})
 
     server.initialise(
         database_file=dbfile,
         testnet=True,
         verbose=True,
-        console_logfilter=os.environ.get('COUNTERPARTY_LOGGING', None),
+        console_logfilter=os.environ.get('BITROOT_LOGGING', None),
         **kwargs)
 
     restore_database(config.DATABASE, sqlfile)
@@ -454,7 +454,7 @@ def initialise_db(db):
 
 def run_scenario(scenario):
     """Execute a scenario for integration test, returns a dump of the db, a json with raw transactions and the full log."""
-    server.initialise(database_file=':memory:', testnet=True, **COUNTERPARTYD_OPTIONS)
+    server.initialise(database_file=':memory:', testnet=True, **BITROOTD_OPTIONS)
     config.PREFIX = b'TESTXXXX'
     util.FIRST_MULTISIG_BLOCK_TESTNET = 1
     checkpoints = dict(check.CHECKPOINTS_TESTNET)
@@ -683,7 +683,7 @@ def reparse(testnet=True):
      - Create a new in-memory DB, copy the DB that is on-disk
      - Reparse DB, automatically compares consensus hashes to the original ones from the on-disk DB
     """
-    options = dict(COUNTERPARTYD_OPTIONS)
+    options = dict(BITROOTD_OPTIONS)
     server.initialise(database_file=':memory:', testnet=testnet, **options)
 
     logger = logging.getLogger()

@@ -81,15 +81,15 @@ class move_old_db(Command):
     def run(self):
         import appdirs
 
-        old_data_dir = appdirs.user_config_dir(appauthor='Counterparty', appname='counterpartyd', roaming=True)
-        old_database = os.path.join(old_data_dir, 'counterpartyd.9.db')
-        old_database_testnet = os.path.join(old_data_dir, 'counterpartyd.9.testnet.db')
+        old_data_dir = appdirs.user_config_dir(appauthor='Bitroot', appname='bitrootd', roaming=True)
+        old_database = os.path.join(old_data_dir, 'bitrootd.9.db')
+        old_database_testnet = os.path.join(old_data_dir, 'bitrootd.9.testnet.db')
 
         new_data_dir = appdirs.user_data_dir(appauthor=config.BITROOT_NAME, appname=config.APP_NAME, roaming=True)
         new_database = os.path.join(new_data_dir, '{}.db'.format(config.APP_NAME))
         new_database_testnet = os.path.join(new_data_dir, '{}.testnet.db'.format(config.APP_NAME))
 
-        # User have an old version of `counterpartyd`
+        # User have an old version of `bitrootd`
         if os.path.exists(old_data_dir):
             # Move database
             if not os.path.exists(new_data_dir):
@@ -186,14 +186,14 @@ required_packages = [
 setup_options = {
     'name': 'bitroot-lib',
     'version': CURRENT_VERSION,
-    'author': 'Counterparty Developers',
-    'author_email': 'dev@counterparty.io',
-    'maintainer': 'Counterparty Developers',
-    'maintainer_email': 'dev@counterparty.io',
-    'url': 'http://counterparty.io',
+    'author': 'Bitroot Developers',
+    'author_email': 'dev@bitroot.io',
+    'maintainer': 'Bitroot Developers',
+    'maintainer_email': 'dev@bitroot.io',
+    'url': 'http://bitroot.io',
     'license': 'MIT',
-    'description': 'Counterparty Protocol Reference Implementation',
-    'keywords': 'counterparty, bitcoin',
+    'description': 'Bitroot Protocol Reference Implementation',
+    'keywords': 'bitroot, bitcoin',
     'classifiers': [
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",

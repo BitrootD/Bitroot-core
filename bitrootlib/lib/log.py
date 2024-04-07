@@ -21,7 +21,7 @@ class ModuleLoggingFilter(logging.Filter):
         filters="*,-bitrootlib.lib,bitrootlib.lib.api"
 
         will log:
-         - counterpartycli.server
+         - bitrootcli.server
          - bitrootlib.lib.api
 
         but will not log:

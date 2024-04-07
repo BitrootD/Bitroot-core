@@ -1,7 +1,7 @@
 """
 Initialise database.
 
-Sieve blockchain for Counterparty transactions, and add them to the database.
+Sieve blockchain for Bitroot transactions, and add them to the database.
 """
 
 import os
@@ -1600,7 +1600,7 @@ def follow(db):
                         else:
                             # If a transaction hasn’t been added to the
                             # table `transactions`, then it’s not a
-                            # Counterparty transaction.
+                            # Bitroot transaction.
                             not_supported[tx_hash] = ''
                             not_supported_sorted.append((block_index, tx_hash))
                             raise MempoolError

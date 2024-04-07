@@ -1,7 +1,7 @@
 # Security Issues
 
 * If you’ve identified a potential **security issue**, please contact us
-  directly at <support@counterparty.io>.
+  directly at <support@bitroot.io>.
 
 
 # Reporting an Issue

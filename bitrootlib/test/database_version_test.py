@@ -10,7 +10,7 @@ from bitrootlib.lib import (config, check, database)
 
 
 def test_check_database_version():
-    server.initialise(database_file=tempfile.gettempdir() + '/fixtures.unittest.db', testnet=True, **util_test.COUNTERPARTYD_OPTIONS)
+    server.initialise(database_file=tempfile.gettempdir() + '/fixtures.unittest.db', testnet=True, **util_test.BITROOTD_OPTIONS)
     util_test.restore_database(config.DATABASE, CURR_DIR + '/fixtures/scenarios/unittest_fixture.sql')
     db = database.get_connection(read_only=False)
     database.update_version(db)

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Run "setup.py develop" if we need to (can be the case if the .egg-info paths get removed, or mounted over, e.g. fednode)
-if [ ! -d /bitroot-lib/counterparty_lib.egg-info ]; then
+if [ ! -d /bitroot-lib/bitroot_lib.egg-info ]; then
     cd /bitroot-lib; python3 setup.py develop; cd /
 fi
 if [ ! -d /Bitroot-cli/bitroot_cli.egg-info ]; then
@@ -11,12 +11,12 @@ fi
 # Bootstrap if the database does not exist (do this here to handle cases
 # where a volume is mounted over the share dir, like the fednode docker compose config does...)
 if ([ -z "$2" ] || [ $2 != "true" ]); then
-    if [ ! -f /root/.local/share/counterparty/counterparty.db ] && [ $1 = "mainnet" ]; then
+    if [ ! -f /root/.local/share/bitroot/bitroot.db ] && [ $1 = "mainnet" ]; then
         echo "Downloading mainnet bootstrap DB..."
         bitroot-server bootstrap --quiet
         PARAMS="${PARAMS} --checkdb"
     fi
-    if [ ! -f /root/.local/share/counterparty/counterparty.testnet.db ] && [ $1 = "testnet" ]; then
+    if [ ! -f /root/.local/share/bitroot/bitroot.testnet.db ] && [ $1 = "testnet" ]; then
         echo "Downloading testnet bootstrap DB..."
         bitroot-server --testnet bootstrap --quiet
         PARAMS="${PARAMS} --checkdb"
